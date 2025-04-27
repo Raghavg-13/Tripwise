@@ -22,7 +22,7 @@ function CreateTrip({ setTrip }) {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const apikey = "" //Enter you gemini key
+  const apikey = "" //Enter your gemini api key
   const OnGenerateTrip = async () => {
     if (!formData?.noOfDays || isNaN(formData.noOfDays)) {
       alert("Please enter a valid number of days.");
