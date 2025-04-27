@@ -17,11 +17,12 @@ function CreateTrip({ setTrip }) {
   const [selectedTraveler, setSelectedTraveler] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
+  
   const handleInputChange = (name, value) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const apikey = "" //Enter you gemini key
   const OnGenerateTrip = async () => {
     if (!formData?.noOfDays || isNaN(formData.noOfDays)) {
       alert("Please enter a valid number of days.");
@@ -57,7 +58,7 @@ function CreateTrip({ setTrip }) {
     setTrip(tripObject);
     navigate("/view-trip");
   };
-
+  
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-blue-50 py-10 px-4 flex justify-center items-start">
       <div className="w-full max-w-4xl bg-white rounded-3xl shadow-2xl p-8 space-y-10">
@@ -76,7 +77,7 @@ function CreateTrip({ setTrip }) {
               Destination
             </label>
             <GooglePlacesAutocomplete
-              apiKey="AIzaSyAI-O5CEIw3Ytzh-K7ZJHVBXc-Q5vUkllE"
+              apiKey={apikey}
               selectProps={{
                 value: place,
                 onChange: (v) => {
