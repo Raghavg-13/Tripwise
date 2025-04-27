@@ -5,7 +5,7 @@ function InfoSection({ trip }) {
 
   useEffect(() => {
     const fetchImage = async () => {
-      const apiKey = "jCVp5JU_kUnRZfpLdBL8IHplGFUigd1OhfEA3ekhUUc";
+      const apikey = "" //Enter your unsplash api key
       const location = trip?.userSelection?.location?.label;
 
       if (!location) return;
