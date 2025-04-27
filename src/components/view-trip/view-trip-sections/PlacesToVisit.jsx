@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 function PlacesToVisit({ trip }) {
   const [placeImages, setPlaceImages] = useState({});
   const itinerary = trip?.tripData?.itinerary || {};
-  const apiKey = "jCVp5JU_kUnRZfpLdBL8IHplGFUigd1OhfEA3ekhUUc";
+  const apikey = "" //Enter your unsplash api key
 
   useEffect(() => {
     const allPlaces = Object.values(itinerary).flat();
