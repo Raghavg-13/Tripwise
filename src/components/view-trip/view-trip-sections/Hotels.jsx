@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 function Hotels({ trip }) {
   const [hotelImages, setHotelImages] = useState({});
-  const apiKey = "jCVp5JU_kUnRZfpLdBL8IHplGFUigd1OhfEA3ekhUUc";
+  const apikey = "" //Enter your unsplash api key
 
   useEffect(() => {
     trip?.tripData?.hotels?.forEach(({ hotelName }) => {
