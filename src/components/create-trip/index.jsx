@@ -7,22 +7,19 @@ import {
 } from "@/constants/options";
 import { chatSession } from "@/service/AIModal";
 import React, { useState } from "react";
-import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { useNavigate } from "react-router-dom";
 
 function CreateTrip({ setTrip }) {
-  const [place, setPlace] = useState();
   const [formData, setFormData] = useState({});
   const [selectedBudget, setSelectedBudget] = useState(null);
   const [selectedTraveler, setSelectedTraveler] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  
+
   const handleInputChange = (name, value) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const apikey = "" //Enter your gemini api key
   const OnGenerateTrip = async () => {
     if (!formData?.noOfDays || isNaN(formData.noOfDays)) {
       alert("Please enter a valid number of days.");
@@ -38,7 +35,7 @@ function CreateTrip({ setTrip }) {
 
     const FINAL_PROMPT = AI_PROMPT.replace(
       "{location}",
-      place?.label || "No location selected"
+      formData.location || "No location selected"
     )
       .replace("{totalDays}", formData.noOfDays)
       .replace("{traveler}", formData.traveler || "Not specified")
@@ -58,7 +55,7 @@ function CreateTrip({ setTrip }) {
     setTrip(tripObject);
     navigate("/view-trip");
   };
-  
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-blue-50 py-10 px-4 flex justify-center items-start">
       <div className="w-full max-w-4xl bg-white rounded-3xl shadow-2xl p-8 space-y-10">
@@ -76,15 +73,11 @@ function CreateTrip({ setTrip }) {
             <label className="block text-lg font-medium text-gray-700 mb-2">
               Destination
             </label>
-            <GooglePlacesAutocomplete
-              apiKey={apikey}
-              selectProps={{
-                value: place,
-                onChange: (v) => {
-                  setPlace(v);
-                  handleInputChange("location", v);
-                },
-              }}
+            <Input
+              type="text"
+              placeholder="e.g. Paris, France"
+              className="w-full bg-gray-100 border border-gray-300 rounded-lg px-4 py-2"
+              onChange={(e) => handleInputChange("location", e.target.value)}
             />
           </div>
 

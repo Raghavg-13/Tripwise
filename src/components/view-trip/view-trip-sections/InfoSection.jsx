@@ -5,13 +5,14 @@ function InfoSection({ trip }) {
 
   useEffect(() => {
     const fetchImage = async () => {
-      const apikey = "" //Enter your unsplash api key
-      const location = trip?.userSelection?.location?.label;
+      const location = trip?.userSelection?.location;
 
       if (!location) return;
 
       const res = await fetch(
-        `https://api.unsplash.com/search/photos?query=${location}&client_id=${apiKey}&orientation=landscape`
+        `https://api.unsplash.com/search/photos?query=${location}&client_id=${
+          import.meta.env.VITE_UNSPLASH_API_KEY
+        }&orientation=landscape`
       );
       const data = await res.json();
       if (data.results.length) setImageUrl(data.results[0].urls.regular);
@@ -31,7 +32,7 @@ function InfoSection({ trip }) {
       />
       <div className="absolute inset-0 flex flex-col justify-center items-center text-white text-center px-4">
         <h1 className="text-4xl md:text-6xl font-bold drop-shadow-md">
-          {trip?.userSelection?.location?.label || "Unknown Location"}
+          {trip?.userSelection?.location || "Unknown Location"}
         </h1>
         <div className="mt-6 flex flex-wrap justify-center gap-4">
           <span className="bg-black bg-opacity-50 rounded-full px-5 py-2 text-lg">

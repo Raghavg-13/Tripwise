@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 
 function Hotels({ trip }) {
   const [hotelImages, setHotelImages] = useState({});
-  const apikey = "" //Enter your unsplash api key
+  const hotels = Array.isArray(trip?.tripData?.hotels)
+    ? trip.tripData.hotels
+    : [];
 
   useEffect(() => {
-    trip?.tripData?.hotels?.forEach(({ hotelName }) => {
+    hotels.forEach(({ hotelName }) => {
       if (!hotelImages[hotelName]) {
         fetchHotelImage(hotelName);
       }
@@ -15,7 +17,9 @@ function Hotels({ trip }) {
   const fetchHotelImage = async (name) => {
     try {
       const res = await fetch(
-        `https://api.unsplash.com/search/photos?query=${name}&client_id=${apiKey}`
+        `https://api.unsplash.com/search/photos?query=${name}&client_id=${
+          import.meta.env.VITE_UNSPLASH_API_KEY
+        }`
       );
       const data = await res.json();
       setHotelImages((prev) => ({
@@ -33,7 +37,7 @@ function Hotels({ trip }) {
         Hotel Recommendations
       </h2>
       <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-        {trip?.tripData?.hotels?.map((hotel, i) => (
+        {hotels.map((hotel, i) => (
           <a
             key={i}
             href={`https://www.google.com/maps?q=${encodeURIComponent(
