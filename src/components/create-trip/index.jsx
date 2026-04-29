@@ -6,10 +6,11 @@ import {
   SelectTravelLists,
 } from "@/constants/options";
 import { chatSession } from "@/service/AIModal";
+import { tripsApi } from "@/service/backendApi";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function CreateTrip({ setTrip }) {
+function CreateTrip() {
   const [formData, setFormData] = useState({});
   const [selectedBudget, setSelectedBudget] = useState(null);
   const [selectedTraveler, setSelectedTraveler] = useState(null);
@@ -35,25 +36,23 @@ function CreateTrip({ setTrip }) {
 
     const FINAL_PROMPT = AI_PROMPT.replace(
       "{location}",
-      formData.location || "No location selected"
+      formData.location || "No location selected",
     )
       .replace("{totalDays}", formData.noOfDays)
       .replace("{traveler}", formData.traveler || "Not specified")
       .replace("{budget}", formData.budget || "Not specified");
 
-    const result = await chatSession.sendMessage(FINAL_PROMPT);
-    setLoading(false);
-
-    SaveAiTrip(result?.response?.text());
-  };
-
-  const SaveAiTrip = (TripData) => {
-    const tripObject = {
-      userSelection: formData,
-      tripData: JSON.parse(TripData),
-    };
-    setTrip(tripObject);
-    navigate("/view-trip");
+    try {
+      const result = await chatSession.sendMessage(FINAL_PROMPT);
+      const tripData = JSON.parse(result?.response?.text());
+      const res = await tripsApi.save(formData, tripData);
+      navigate(`/view-trip/${res.data.id}`);
+    } catch (err) {
+      console.error("Trip generation failed:", err);
+      alert("Could not generate or save your trip. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

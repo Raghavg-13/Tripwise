@@ -1,13 +1,43 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { tripsApi } from "@/service/backendApi";
 import Footer from "./view-trip-sections/Footer";
 import Hotels from "./view-trip-sections/Hotels";
 import InfoSection from "./view-trip-sections/InfoSection";
 import PlacesToVisit from "./view-trip-sections/PlacesToVisit";
 
-function Viewtrip({ trip }) {
-  if (!trip) {
+function Viewtrip() {
+  const { id } = useParams();
+  const [trip, setTrip] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    tripsApi
+      .getById(id)
+      .then((res) => {
+        const raw = res.data;
+        setTrip({
+          userSelection: JSON.parse(raw.userSelection),
+          tripData: JSON.parse(raw.tripData),
+        });
+      })
+      .catch(() => setError("Could not load this trip."))
+      .finally(() => setLoading(false));
+  }, [id]);
+
+  if (loading) {
     return (
-      <div className="text-center p-10 text-gray-500">
-        No trip data available.
+      <div className="min-h-screen flex items-center justify-center text-gray-500 text-lg">
+        Loading trip...
+      </div>
+    );
+  }
+
+  if (error || !trip) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-gray-500 text-lg">
+        {error || "Trip not found."}
       </div>
     );
   }

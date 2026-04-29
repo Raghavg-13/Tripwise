@@ -1,12 +1,12 @@
-import { useState } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Home from "./components/Home/index";
 import CreateTrip from "./components/create-trip/index";
 import Viewtrip from "./components/view-trip/index";
+import MyTrips from "./components/MyTrips/index";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { AuthProvider } from "./context/AuthContext";
 
 function App() {
-  const [trip, setTrip] = useState(null);
-
   const router = createBrowserRouter([
     {
       path: "/",
@@ -14,15 +14,35 @@ function App() {
     },
     {
       path: "/create-trip",
-      element: <CreateTrip setTrip={setTrip} />,
+      element: (
+        <ProtectedRoute>
+          <CreateTrip />
+        </ProtectedRoute>
+      ),
     },
     {
-      path: "/view-trip",
-      element: <Viewtrip trip={trip} />,
+      path: "/view-trip/:id",
+      element: (
+        <ProtectedRoute>
+          <Viewtrip />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/my-trips",
+      element: (
+        <ProtectedRoute>
+          <MyTrips />
+        </ProtectedRoute>
+      ),
     },
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  );
 }
 
 export default App;
